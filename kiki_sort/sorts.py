@@ -1,6 +1,7 @@
 from .ext import is_sorted, default_compare, reverse_default_compare, get_digit
 from random import shuffle
 from math import log
+from asyncio import sleep, wait, run
 
 def bubble_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
     if len(l) < 2: return l
@@ -124,6 +125,18 @@ def random_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = 
     while True:
         shuffle(l)
         if is_sorted(l, key = key, compare = compare): return l
+    
+def double_random_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list:
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l, key = key, compare = compare): return l
+    i = 2
+    while True:
+        l[:i] = random_sort(l[:i])
+        i += 1
+        if not is_sorted(l[:i]):
+            shuffle(l)
+            i = 2
+        if is_sorted(l, key = key, compare = compare): return l
 
 def counting_sort(l: list, check_sort: bool = False):
     if len(l) < 2: return l
@@ -155,4 +168,140 @@ def radix_sort(l, b: int = 10, check_sort: bool = False):
     l = list(map(int, l))
     ds = int(log(max(l), b) + 1)
     for d in range(ds): l = counting_sort_with_digits(l, d, b)
+    return l
+
+def shell_sort(l: list, check_sort: bool = False):
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l): return l
+    l = list(map(int, l))
+    g = len(l) // 2
+    while g > 0:
+        for s in range(g): l = gapinsertion_sort(l, s, g)
+        g //= 2
+    return l
+
+def gapinsertion_sort(l, s, g):
+    for i in range(s + g, len(l), g):
+        v = l[i]
+        p = i
+
+        while p >= g and l[p - g] > v:
+            l[p] = l[p - g]
+            p -= g
+
+        l[p] = v
+    
+    return l
+
+def sleep_sort(l: list, check_sort: bool = False, minify = 10000000000):
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l): return l
+    l = list(map(int, l))
+    res = []
+
+    async def sleep_return(n):
+        await sleep(n / minify)
+        res.append(n)
+    
+    run(wait(map(sleep_return, l)))
+    return res
+
+def cocktail_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l, key = key, compare = compare): return l
+    edit_l = list(map(key, l))
+
+    sw = True
+    s = 0
+    e = len(l) - 1
+    while sw:
+        sw = False
+        for i in range(s, e):
+            if not compare(edit_l[i], edit_l[i + 1]):
+                edit_l[i], edit_l[i + 1] = edit_l[i + 1], edit_l[i]
+                l[i], l[i + 1] = l[i + 1], l[i]
+                sw = True
+        
+        if not sw: return
+        sw = False
+        e -= 1
+
+        for i in range(e - 1, s - 1, -1):
+            if not compare(edit_l[i], edit_l[i + 1]):
+                edit_l[i], edit_l[i + 1] = edit_l[i + 1], edit_l[i]
+                l[i], l[i + 1] = l[i + 1], l[i]
+                sw = True
+        s += 1
+    
+    return l
+
+def gnome_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l, key = key, compare = compare): return l
+    edit_l = list(map(key, l))
+    i = 0
+    while i < len(l):
+        if not i: i += 1
+        if not compare(edit_l[i], edit_l[i - 1]): i += 1
+        else: 
+            l[i], l[i - 1] = l[i - 1], l[i]
+            edit_l[i], edit_l[i - 1] = edit_l[i - 1], edit_l[i]
+            i -= 1
+    return l
+
+def comb_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l, key = key, compare = compare): return l
+    edit_l = list(map(key, l))
+    g = len(l)
+    sw = True
+    while g != 1 or sw:
+        g = g * 10 // 13
+        if g < 1: g = 1
+        sw = False
+        for i in range(0, len(l) - g):
+            if not compare(edit_l[i], edit_l[i + g]):
+                l[i], l[i + g] = l[i + g], l[i]
+                edit_l[i], edit_l[i + g] = edit_l[i + g], edit_l[i]
+                sw = True
+    return l
+
+def pigeonhole_sort(l: list, check_sort: bool = False) -> list: 
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l): return l
+    
+    a = min(l)
+    h = [0] * (max(l) - a + 1)
+    for i in l: h[i - a] += 1
+    
+    i = 0
+    for c in range(max(l) - a + 1):
+        while h[c]:
+            h[c] -= 1
+            l[i] = i + a
+            i += 1
+
+    return l
+
+def brick_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+    if len(l) < 2: return l
+    if check_sort and is_sorted(l, key = key, compare = compare): return l
+    edit_l = list(map(key, l))
+    sw = True
+
+    while sw:
+        sw = False
+        
+        for i in range(1, len(l) - 1, 2):
+            if not compare(edit_l[i], edit_l[i + 1]):
+                edit_l[i], edit_l[i + 1] = edit_l[i + 1], edit_l[i]
+                l[i], l[i + 1] = l[i + 1], l[i]
+                sw = True
+
+        for i in range(0, len(l) - 1, 2):
+            if not compare(edit_l[i], edit_l[i + 1]):
+                edit_l[i], edit_l[i + 1] = edit_l[i + 1], edit_l[i]
+                l[i], l[i + 1] = l[i + 1], l[i]
+                sw = True
+
     return l

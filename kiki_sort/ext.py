@@ -1,6 +1,6 @@
-def default_compare(a, b) -> bool: return a < b
-def reverse_default_compare(a, b) -> bool: return a > b
-def get_digit(n, d, b) -> int: return (n // b ** d) % b
+default_compare = lambda a, b: a < b
+reverse_default_compare = lambda a, b: a > b
+get_digit = lambda n, d, b: (n // b ** d) % b
 
 def is_sorted(l, key = lambda x: x, compare = default_compare) -> bool:
     l = list(map(key, l))

@@ -21,3 +21,29 @@
 **counting_sort_with_digits:** 자리수 카운팅 정렬
 
 **radix_sort:** 기수 정렬 (시간복잡도: O(kn))
+
+**gapinsertion_sort:** 갭 삽입정렬
+
+**shell_sort:** 셸 정렬 (시간복잡도: O(n²))
+
+**double_random_sort:** 보고보고 정렬 (시간복잡도: O(n!^n!))
+
+**sleep_sort:** 대기 정렬 (시간복잡도: O(kn))
+
+**cocktail_sort:** 칵테일 정렬
+
+**pigeonhole_sort:** 비둘기 정렬
+
+**gnome_sort:** 그놈 정렬
+
+**comb_sort:** 빗 정렬 (시간복잡도: O(n²))
+
+**brick_sort:** 벽돌 정렬 
+
+
+## 만들 것
++ Tag Sort
++ Tree Sort
++ Cartesian Tree Sort
++ Stooge Sort
++ Cycle Sort
