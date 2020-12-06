@@ -1,5 +1,7 @@
 # 내장 함수
+
 ## SORTS
+### 종류
 **bubble_sort:** 버블 정렬 (시간복잡도: O(n²))
 
 **selection_sort:** 선택 정렬 (시간복잡도: O(n²))
@@ -16,13 +18,9 @@
 
 **random_sort:** 보고 정렬 (시간복잡도: O(n×n!))
 
-**counting_sort:** 카운팅 정렬 (시간복잡도: O(n+k))
-
-**counting_sort_with_digits:** 자리수 카운팅 정렬
+**counting_sort:** 계수 정렬 (시간복잡도: O(n+k))
 
 **radix_sort:** 기수 정렬 (시간복잡도: O(kn))
-
-**gapinsertion_sort:** 갭 삽입정렬
 
 **shell_sort:** 셸 정렬 (시간복잡도: O(n²))
 
@@ -41,7 +39,7 @@
 **brick_sort:** 벽돌 정렬 
 
 
-## 만들 것
+### 만들 것
 + Tag Sort
 + Tree Sort
 + Cartesian Tree Sort

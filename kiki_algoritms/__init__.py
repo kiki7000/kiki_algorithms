@@ -1,3 +1,13 @@
+from .fibonacci import (
+    fibonacci_recursion,
+    fibonacci_dp
+)
+
+from .factorial import (
+    factorial_recursion,
+    factorial_dp
+)
+
 from .sorts import (
     bubble_sort, selection_sort, insertion_sort, merge_sort, heap_sort, 
     quick_sort, tim_sort, random_sort, counting_sort, counting_sort_with_digits, 
@@ -6,4 +16,7 @@ from .sorts import (
     brick_sort
 )
 
-from .ext import is_sorted, default_compare
+__title__ = 'kiki_algoritms'
+__author__ = 'kiki7000'
+__license__ = 'AGPL-3.0'
+__version__ = '1.0.1'

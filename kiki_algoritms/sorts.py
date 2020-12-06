@@ -1,9 +1,20 @@
-from .ext import is_sorted, default_compare, reverse_default_compare, get_digit
 from random import shuffle
 from math import log
+
 from asyncio import sleep, wait, run
 
-def bubble_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+from typing import Callable, List
+
+from .utils import (
+    is_sorted, default_compare, reverse_default_compare,
+    get_digit
+)
+
+def bubble_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n²)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -15,7 +26,11 @@ def bubble_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = 
                 l[j], l[j + 1] = l[j + 1], l[j]
     return l    
 
-def selection_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def selection_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n²)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -31,7 +46,11 @@ def selection_sort(l: list, check_sort: bool = False, key = lambda x: x, compare
 
     return l    
 
-def insertion_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def insertion_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]: 
+    """
+    시간복잡도: O(n²)
+    """
+    
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -47,7 +66,7 @@ def insertion_sort(l: list, check_sort: bool = False, key = lambda x: x, compare
         l[j + 1] = k
     return l    
 
-def merge(l, r, key = lambda x: x, compare = default_compare) -> list:
+def merge(l, r, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
     res = []
     el = list(map(key, l))
     er = list(map(key, r))
@@ -72,14 +91,18 @@ def merge(l, r, key = lambda x: x, compare = default_compare) -> list:
     return res
 
 
-def merge_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def merge_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]: 
+    """
+    시간복잡도: O(n log n)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     lft = l[:len(l) // 2]
     rgt = l[len(l) // 2:]
     return merge(merge_sort(lft, check_sort = check_sort, key = key, compare = compare), merge_sort(rgt, check_sort = check_sort, key = key, compare = compare), key = key, compare = compare)
 
-def heapify(l: list, s: int, i: int, key = lambda x: x, compare = default_compare) -> list:
+def heapify(l: List[int], s: int, i: int, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
     edit_l = list(map(key, l))
     lr = i
     lft = 2 * lr + 1
@@ -91,7 +114,11 @@ def heapify(l: list, s: int, i: int, key = lambda x: x, compare = default_compar
         l = heapify(l, s, lr, key, compare)
     return l
 
-def heap_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def heap_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n log n)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     for i in range(len(l), -1, -1): l = heapify(l, len(l), i, key = key, compare = compare)
@@ -100,7 +127,11 @@ def heap_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = de
         l = heapify(l, i, 0, key = key, compare = compare)
     return l
 
-def quick_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare, compare2 = reverse_default_compare) -> list: 
+def quick_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare, compare2: Callable = reverse_default_compare) -> List[int]:
+    """
+    시간복잡도: O(n log n)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -114,19 +145,31 @@ def quick_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = d
 
     return quick_sort(a, check_sort = check_sort, key = key, compare = compare, compare2 = compare2) + b + quick_sort(c, check_sort = check_sort, key = key, compare = compare, compare2 = compare2)
 
-def tim_sort(l: list, check_sort: bool = False, key = lambda x: x) -> list: 
+def tim_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x) -> List[int]:
+    """
+    (Python 내장 정렬 함수)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key): return l
     return sorted(l, key = key)
 
-def random_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list:
+def random_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n×n!)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     while True:
         shuffle(l)
         if is_sorted(l, key = key, compare = compare): return l
     
-def double_random_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list:
+def double_random_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n!^n!)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     i = 2
@@ -138,7 +181,11 @@ def double_random_sort(l: list, check_sort: bool = False, key = lambda x: x, com
             i = 2
         if is_sorted(l, key = key, compare = compare): return l
 
-def counting_sort(l: list, check_sort: bool = False):
+def counting_sort(l: List[int], check_sort: bool = False):
+    """
+    시간복잡도: O(n + k)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l): return l
     l = list(map(int, l))
@@ -151,7 +198,7 @@ def counting_sort(l: list, check_sort: bool = False):
         a[i] -= 1
     return res
 
-def counting_sort_with_digits(l: list, d: int, b: int = 10):
+def counting_sort_with_digits(l: List[int], d: int, b: int = 10):
     l = list(map(int, l))
     res = [-1] * len(l)
     a = [0] * b
@@ -162,7 +209,11 @@ def counting_sort_with_digits(l: list, d: int, b: int = 10):
         a[get_digit(i, d, b)] -= 1
     return res
 
-def radix_sort(l, b: int = 10, check_sort: bool = False):
+def radix_sort(l: List[int], b: int = 10, check_sort: bool = False):
+    """
+    시간복잡도: O(kn)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l): return l
     l = list(map(int, l))
@@ -170,7 +221,11 @@ def radix_sort(l, b: int = 10, check_sort: bool = False):
     for d in range(ds): l = counting_sort_with_digits(l, d, b)
     return l
 
-def shell_sort(l: list, check_sort: bool = False):
+def shell_sort(l: List[int], check_sort: bool = False):
+    """
+    시간복잡도: O(n²)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l): return l
     l = list(map(int, l))
@@ -180,7 +235,7 @@ def shell_sort(l: list, check_sort: bool = False):
         g //= 2
     return l
 
-def gapinsertion_sort(l, s, g):
+def gapinsertion_sort(l: List[int], s, g):
     for i in range(s + g, len(l), g):
         v = l[i]
         p = i
@@ -193,7 +248,11 @@ def gapinsertion_sort(l, s, g):
     
     return l
 
-def sleep_sort(l: list, check_sort: bool = False, minify = 10000000000):
+def sleep_sort(l: List[int], check_sort: bool = False, minify = 10000000000):
+    """
+    시간복잡도: O(kn)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l): return l
     l = list(map(int, l))
@@ -206,7 +265,7 @@ def sleep_sort(l: list, check_sort: bool = False, minify = 10000000000):
     run(wait(map(sleep_return, l)))
     return res
 
-def cocktail_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def cocktail_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]: 
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -222,7 +281,7 @@ def cocktail_sort(l: list, check_sort: bool = False, key = lambda x: x, compare 
                 l[i], l[i + 1] = l[i + 1], l[i]
                 sw = True
         
-        if not sw: return
+        if not sw: return l
         sw = False
         e -= 1
 
@@ -235,7 +294,7 @@ def cocktail_sort(l: list, check_sort: bool = False, key = lambda x: x, compare 
     
     return l
 
-def gnome_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def gnome_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]: 
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -249,7 +308,11 @@ def gnome_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = d
             i -= 1
     return l
 
-def comb_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def comb_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]:
+    """
+    시간복잡도: O(n²)
+    """
+
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
@@ -266,7 +329,7 @@ def comb_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = de
                 sw = True
     return l
 
-def pigeonhole_sort(l: list, check_sort: bool = False) -> list: 
+def pigeonhole_sort(l: List[int], check_sort: bool = False) -> List[int]: 
     if len(l) < 2: return l
     if check_sort and is_sorted(l): return l
     
@@ -283,7 +346,7 @@ def pigeonhole_sort(l: list, check_sort: bool = False) -> list:
 
     return l
 
-def brick_sort(l: list, check_sort: bool = False, key = lambda x: x, compare = default_compare) -> list: 
+def brick_sort(l: List[int], check_sort: bool = False, key: Callable = lambda x: x, compare: Callable = default_compare) -> List[int]: 
     if len(l) < 2: return l
     if check_sort and is_sorted(l, key = key, compare = compare): return l
     edit_l = list(map(key, l))
