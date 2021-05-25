@@ -1,2 +1,2 @@
 asyncio==3.4.3
-six
+six==1.16.0

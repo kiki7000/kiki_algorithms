@@ -129,9 +129,9 @@ dmypy.json
 .pyre/
 
 # test
-test.py
+test.*
+test/
 
-# Hello, World!
 .IDEA
 .vscode
 .DS_Store
